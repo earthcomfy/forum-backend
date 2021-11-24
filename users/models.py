@@ -34,8 +34,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             ('EME', 'Electro-Mechanical Engineering')
         ))
     ]
+    name = models.CharField(_('name'), max_length=100)
     student_id = models.CharField(_('student id'), max_length=8, unique=True)
-    name = models.CharField(_('name'), max_length=100, unique=True)
     email = models.EmailField(_('email address'), unique=True)
     dept_choice = models.CharField(max_length=3, choices=DEPARTMENTS)
     username = None
