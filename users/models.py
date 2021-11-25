@@ -3,10 +3,10 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 
-from .managers import CustomUserManager
+from .managers import StudentManager
 
 
-class CustomUser(AbstractBaseUser, PermissionsMixin):
+class Student(AbstractBaseUser, PermissionsMixin):
     DEPARTMENTS = [
         ('fcfe', (
             ('CE', 'Chemical Engineering'),
@@ -46,7 +46,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']
 
-    objects = CustomUserManager()
+    objects = StudentManager()
 
     def get_full_name(self):
         return self.name

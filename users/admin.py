@@ -1,15 +1,15 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import CustomUser
+from .forms import StudentCreationForm, StudentChangeForm
+from .models import Student
 
 
 class CustomUserAdmin(UserAdmin):
-    add_form = CustomUserCreationForm
-    form = CustomUserChangeForm
+    add_form = StudentCreationForm
+    form = StudentChangeForm
 
-    model = CustomUser
+    model = Student
     
     list_display = ('name', 'student_id', 'dept_choice', 'email', 'is_active', 'is_staff', 'is_superuser', 'last_login',)
     list_filter = ('is_active', 'is_staff', 'is_superuser')
@@ -28,4 +28,4 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('email',)
 
 
-admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(Student, CustomUserAdmin)

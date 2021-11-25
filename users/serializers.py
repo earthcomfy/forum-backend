@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 
-from .models import CustomUser
+from .models import Student
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
     Serializer class to seralize CustomUser model.
     """
     class Meta:
-        model = CustomUser
+        model = Student
         fields = ('id', 'name', 'student_id', 'email', 'dept_choice')
 
 
@@ -18,12 +18,12 @@ class UserRegisterationSerializer(serializers.ModelSerializer):
     Serializer class to serialize registeration requests and create a new user.
     """
     class Meta:
-        model = CustomUser
+        model = Student
         fields = ('id', 'name', 'student_id', 'email', 'dept_choice', 'password')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        return CustomUser.objects.create_user(**validated_data)
+        return Student.objects.create_user(**validated_data)
 
 
 class UserLoginSerializer(serializers.Serializer):
