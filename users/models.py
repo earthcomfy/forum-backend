@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils import timezone
 from django.utils.translation import ugettext as _
+from django.core.validators import RegexValidator
 
 from .managers import StudentManager
 
@@ -34,8 +35,8 @@ class Student(AbstractBaseUser, PermissionsMixin):
             ('EME', 'Electro-Mechanical Engineering')
         ))
     ]
-    name = models.CharField(_('name'), max_length=100)
-    student_id = models.CharField(_('student id'), max_length=8, unique=True)
+    name = models.CharField(_('name'), max_length=100, validators=[RegexValidator(r'^[a-zA-Z ]+$')])
+    student_id = models.CharField(_('student id'), unique=True, max_length=7, validators=[RegexValidator(r'^\d{1,10}$')])
     email = models.EmailField(_('email address'), unique=True)
     dept_choice = models.CharField(max_length=3, choices=DEPARTMENTS)
     username = None

@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from rest_framework_simplejwt import token_blacklist
 
 from .forms import StudentCreationForm, StudentChangeForm
 from .models import Student
@@ -28,4 +29,13 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('email',)
 
 
+class OutstandingTokenAdmin(token_blacklist.admin.OutstandingTokenAdmin):
+
+    def has_delete_permission(self, *args, **kwargs):
+        return True
+
+
 admin.site.register(Student, CustomUserAdmin)
+
+admin.site.unregister(token_blacklist.models.OutstandingToken)
+admin.site.register(token_blacklist.models.OutstandingToken, OutstandingTokenAdmin)

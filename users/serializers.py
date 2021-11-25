@@ -21,6 +21,14 @@ class UserRegisterationSerializer(serializers.ModelSerializer):
         model = Student
         fields = ('id', 'name', 'student_id', 'email', 'dept_choice', 'password')
         extra_kwargs = {'password': {'write_only': True}}
+    
+    def validate_name(self, value):
+        """
+        Check that the given student name is valid
+        """
+        if not len(value.split()) > 1:
+            raise serializers.ValidationError("Please enter full name")
+        return value
 
     def create(self, validated_data):
         return Student.objects.create_user(**validated_data)
