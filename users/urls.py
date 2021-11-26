@@ -10,5 +10,5 @@ urlpatterns = [
     path('login/', StudentLoginAPIView.as_view(), name="login_student"),
     path('student/', StudentAPIView.as_view(), name="get_student"),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('blacklist/', StudentLogoutAPIView.as_view(), name='blacklist')
+    path('logout/', StudentLogoutAPIView.as_view(), name='blacklist')
 ]
