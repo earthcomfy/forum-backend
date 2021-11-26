@@ -19,9 +19,10 @@ class StudentRegisterationSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Student
-        fields = ('id', 'name', 'student_id', 'email', 'dept_choice', 'password')
+        fields = ('id', 'name', 'student_id',
+                  'email', 'dept_choice', 'password')
         extra_kwargs = {'password': {'write_only': True}}
-    
+
     def validate_name(self, value):
         """
         Check that the given student name is valid
