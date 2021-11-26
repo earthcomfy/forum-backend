@@ -6,7 +6,7 @@ from .forms import StudentCreationForm, StudentChangeForm
 from .models import Student
 
 
-class CustomUserAdmin(UserAdmin):
+class StudentAdmin(UserAdmin):
     add_form = StudentCreationForm
     form = StudentChangeForm
 
@@ -35,7 +35,7 @@ class OutstandingTokenAdmin(token_blacklist.admin.OutstandingTokenAdmin):
         return True
 
 
-admin.site.register(Student, CustomUserAdmin)
+admin.site.register(Student, StudentAdmin)
 
 admin.site.unregister(token_blacklist.models.OutstandingToken)
 admin.site.register(token_blacklist.models.OutstandingToken, OutstandingTokenAdmin)

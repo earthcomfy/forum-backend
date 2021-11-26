@@ -1,18 +1,18 @@
 from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView, RetrieveAPIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .serializers import UserSerializer, UserRegisterationSerializer, UserLoginSerializer
+from .serializers import StudentSerializer, StudentRegisterationSerializer, StudentLoginSerializer
 
 
-class UserRegisterationAPIView(GenericAPIView):
+class StudentRegisterationAPIView(GenericAPIView):
     """
-    An endpoint for the client to create a new user. 
+    An endpoint for the client to create a new student. 
     """
     permission_classes = (AllowAny,)
-    serializer_class = UserRegisterationSerializer
+    serializer_class = StudentRegisterationSerializer
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -27,18 +27,18 @@ class UserRegisterationAPIView(GenericAPIView):
         return Response(data, status=status.HTTP_201_CREATED)
 
 
-class UserLoginAPIView(GenericAPIView):
+class StudentLoginAPIView(GenericAPIView):
     """
-    An endpoint to authenticate existing users using their email and password.
+    An endpoint to authenticate existing students using their email and password.
     """
     permission_classes = (AllowAny,)
-    serializer_class = UserLoginSerializer
+    serializer_class = StudentLoginSerializer
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
-        serializer = UserSerializer(user)
+        serializer = StudentSerializer(user)
         token = RefreshToken.for_user(user)
         data = serializer.data
         data['tokens'] = {
@@ -46,3 +46,14 @@ class UserLoginAPIView(GenericAPIView):
             'access': str(token.access_token)
         }
         return Response(data, status=status.HTTP_200_OK)
+
+
+class StudentAPIView(RetrieveAPIView):
+    """
+    An endpoint to get information of an authenticated student
+    """
+    permission_classes = (IsAuthenticated,)
+    serializer_class = StudentSerializer
+
+    def get_object(self):
+        return self.request.user
