@@ -7,6 +7,7 @@ class StudentManager(BaseUserManager):
     Custom user manager where email is the unique identifier
     for authentication instead of username
     """
+
     def create_user(self, email, password, **extra_fields):
         """
         Create and save a user with the given email and password.
@@ -18,7 +19,7 @@ class StudentManager(BaseUserManager):
         user.set_password(password)
         user.save()
         return user
-    
+
     def create_superuser(self, email, password, **extra_fields):
         """
         Create and save a SuperUser with the given email and password.

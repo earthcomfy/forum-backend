@@ -35,8 +35,10 @@ class Student(AbstractBaseUser, PermissionsMixin):
             ('EME', 'Electro-Mechanical Engineering')
         ))
     ]
-    name = models.CharField(_('name'), max_length=100, validators=[RegexValidator(r'^[a-zA-Z ]+$')])
-    student_id = models.CharField(_('student id'), unique=True, max_length=7, validators=[RegexValidator(r'^\d{1,10}$')])
+    name = models.CharField(_('name'), max_length=100, validators=[
+                            RegexValidator(r'^[a-zA-Z ]+$')])
+    student_id = models.CharField(_('student id'), unique=True, max_length=7, validators=[
+                                  RegexValidator(r'^\d{1,10}$')])
     email = models.EmailField(_('email address'), unique=True)
     dept_choice = models.CharField(max_length=3, choices=DEPARTMENTS)
     username = None
