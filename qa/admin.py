@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import QuestionCategory, Question
 
-# Register your models here.
+
+admin.site.register(QuestionCategory)
+admin.site.register(Question)
