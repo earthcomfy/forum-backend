@@ -1,9 +1,6 @@
 from django.db import models
-from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
-
-
-User = get_user_model()
 
 
 class QuestionCategory(models.Model):
@@ -27,7 +24,7 @@ def get_default_question_category():
 class Question(models.Model):
     title = models.CharField(_('Question title'), max_length=250)
     author = models.ForeignKey(
-        User, related_name="questions", null=True, on_delete=models.SET_NULL)
+        settings.AUTH_USER_MODEL, related_name="questions", null=True, on_delete=models.SET_NULL)
     category = models.ForeignKey(
         QuestionCategory, related_name="question_list", on_delete=models.SET(get_default_question_category))
     body = models.TextField(_('Question body'))
