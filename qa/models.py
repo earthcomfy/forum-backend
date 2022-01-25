@@ -28,6 +28,7 @@ class Question(models.Model):
     category = models.ForeignKey(
         QuestionCategory, related_name="question_list", on_delete=models.SET(get_default_question_category))
     body = models.TextField(_('Question body'))
+    image = models.ImageField(upload_to="question", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
