@@ -1,17 +1,16 @@
+from django.db import models
+from django.db.models import fields
 from rest_framework import serializers
-from .models import Question, QuestionCategory
+from .models import Question, QuestionCategory, Answer
 
 
 class QuestionCategorySerializer(serializers.ModelSerializer):
     """
     Serializer class to seralize Question model.
     """
-
     class Meta:
         model = QuestionCategory
-        fields = (
-            'id', 'name',
-        )
+        fields = ('id', 'name',)
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -23,9 +22,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = (
-            'id', 'title', 'author', 'category', 'body',
-        )
+        fields = ('id', 'title', 'author', 'category', 'body',)
 
     def create(self, validated_data):
         category_data = validated_data.pop('category')
@@ -45,3 +42,14 @@ class QuestionSerializer(serializers.ModelSerializer):
         category.name = category_data.get('name', category.name)
         category.save()
         return instance
+
+
+class AnswerModelSerializer(serializers.ModelSerializer):
+    """
+    Serializer class to seralize Answer model.
+    """
+    author = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = Answer
+        fields = ('id', 'author', 'question', 'body',)
