@@ -11,15 +11,16 @@ To get this project up and running locally on your computer follow the following
 ```
 $ pip install -r requirements.txt
 ```
-4. Rename the `.env.example` file found in the root directory of the project to `.env` and update
-   the environment variables accordingly.
-5. Set up a Postgres database for the project.
-6. Run the following commands to setup the database tables and create a super user.
+4. Create `.env` and Generate a secret key from this site https://djecrety.ir/ and paste it into the .env file as follows.
+   SECRET_KEY = your_generated_secret_key
+6. Set up a Postgres database for the project.
+7. Run the following commands to setup the database tables and create a super user.
 
 ```
 $ python manage.py migrate
 $ python manage.py createsuperuser
 ```
+
 
 7. Run the development server using:
 
