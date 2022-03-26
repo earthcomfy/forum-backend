@@ -25,8 +25,8 @@ class Question(models.Model):
     title = models.CharField(_('Question title'), max_length=250)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name="questions", null=True, on_delete=models.SET_NULL)
-    category = models.ForeignKey(
-        QuestionCategory, related_name="question_list", on_delete=models.SET(get_default_question_category))
+    categories = models.ManyToManyField(
+        QuestionCategory, related_name="question_list")
     body = models.TextField(_('Question body'))
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

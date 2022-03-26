@@ -1,6 +1,5 @@
-from django.db import models
-from django.db.models import fields
 from rest_framework import serializers
+
 from .models import Question, QuestionCategory, Answer
 
 
@@ -17,30 +16,41 @@ class QuestionSerializer(serializers.ModelSerializer):
     """
     Serializer class to seralize Question model.
     """
-    category = QuestionCategorySerializer()
+    categories = QuestionCategorySerializer(many=True)
     author = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Question
-        fields = ('id', 'title', 'author', 'category', 'body',)
+        fields = ('id', 'title', 'author', 'categories', 'body',)
 
     def create(self, validated_data):
-        category_data = validated_data.pop('category')
-        data, _ = QuestionCategory.objects.get_or_create(**category_data)
-        question = Question.objects.create(category=data, **validated_data)
+        categories_data = validated_data.pop('categories')
+        category_list = []
+
+        question = Question.objects.create(**validated_data)
+
+        for category_data in categories_data:
+            category, _ = QuestionCategory.objects.get_or_create(
+                **category_data)
+            category_list.append(category)
+
+        question.categories.set(category_list)
         return question
 
     def update(self, instance, validated_data):
-        category_data = validated_data.pop('category')
+        categories_data = validated_data.pop('categories')
+        category_list = []
+
+        for category_data in categories_data:
+            category, _ = QuestionCategory.objects.update_or_create(
+                **category_data)
+            category_list.append(category)
+
+        instance.categories.set(category_list)
         instance.title = validated_data.get('title', instance.title)
         instance.body = validated_data.get('body', instance.body)
-        instance.name = category_data.get(
-            'name', instance.category.name)
-        instance.save()
 
-        category = instance.category
-        category.name = category_data.get('name', category.name)
-        category.save()
+        instance.save()
         return instance
 
 
