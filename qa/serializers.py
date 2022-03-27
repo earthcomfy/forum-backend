@@ -18,10 +18,14 @@ class QuestionSerializer(serializers.ModelSerializer):
     """
     categories = QuestionCategorySerializer(many=True)
     author = serializers.PrimaryKeyRelatedField(read_only=True)
+    name = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
-        fields = ('id', 'title', 'author', 'categories', 'body',)
+        fields = ('id', 'title', 'author', 'name', 'categories', 'body',)
+
+    def get_name(self, obj):
+        return obj.author.get_full_name()
 
     def create(self, validated_data):
         categories_data = validated_data.pop('categories')
