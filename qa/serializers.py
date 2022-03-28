@@ -22,7 +22,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('id', 'title', 'author', 'name', 'categories', 'body',)
+        fields = ('__all__')
 
     def get_name(self, obj):
         return obj.author.get_full_name()
