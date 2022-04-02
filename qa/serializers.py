@@ -12,6 +12,17 @@ class QuestionCategorySerializer(serializers.ModelSerializer):
         fields = ('id', 'name',)
 
 
+class AnswerModelSerializer(serializers.ModelSerializer):
+    """
+    Serializer class to seralize Answer model.
+    """
+    author = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = Answer
+        fields = ('id', 'author', 'question', 'body',)
+
+
 class QuestionSerializer(serializers.ModelSerializer):
     """
     Serializer class to seralize Question model.
@@ -19,6 +30,7 @@ class QuestionSerializer(serializers.ModelSerializer):
     categories = QuestionCategorySerializer(many=True)
     author = serializers.PrimaryKeyRelatedField(read_only=True)
     name = serializers.SerializerMethodField()
+    answer = AnswerModelSerializer(many=True)
 
     class Meta:
         model = Question
@@ -26,6 +38,9 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     def get_name(self, obj):
         return obj.author.get_full_name()
+
+    def get_answers(self, obj):
+        return obj.answer.all()
 
     def create(self, validated_data):
         categories_data = validated_data.pop('categories')
@@ -56,14 +71,3 @@ class QuestionSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
-
-
-class AnswerModelSerializer(serializers.ModelSerializer):
-    """
-    Serializer class to seralize Answer model.
-    """
-    author = serializers.PrimaryKeyRelatedField(read_only=True)
-
-    class Meta:
-        model = Answer
-        fields = ('id', 'author', 'question', 'body',)
