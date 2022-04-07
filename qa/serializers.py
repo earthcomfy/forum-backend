@@ -17,10 +17,14 @@ class AnswerModelSerializer(serializers.ModelSerializer):
     Serializer class to seralize Answer model.
     """
     author = serializers.PrimaryKeyRelatedField(read_only=True)
+    name = serializers.SerializerMethodField()
 
     class Meta:
         model = Answer
-        fields = ('id', 'author', 'question', 'body',)
+        fields = ('__all__')
+
+    def get_name(self, obj):
+        return obj.author.get_full_name()
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -30,7 +34,7 @@ class QuestionSerializer(serializers.ModelSerializer):
     categories = QuestionCategorySerializer(many=True)
     author = serializers.PrimaryKeyRelatedField(read_only=True)
     name = serializers.SerializerMethodField()
-    answer = AnswerModelSerializer(many=True)
+    answer = AnswerModelSerializer(many=True, read_only=True)
 
     class Meta:
         model = Question
