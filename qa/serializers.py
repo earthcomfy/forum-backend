@@ -17,7 +17,7 @@ class BaseSerializer(serializers.ModelSerializer):
     Base serializer class.
     """
     author = serializers.PrimaryKeyRelatedField(read_only=True)
-    name = serializers.CharField(source='author.get_full_name')
+    name = serializers.CharField(source='author.get_full_name', read_only=True)
 
 
 class QuestionCommentSerializer(BaseSerializer):
@@ -49,13 +49,11 @@ class AnswerModelSerializer(BaseSerializer):
         fields = ('__all__')
 
 
-class QuestionSerializer(serializers.ModelSerializer):
+class QuestionSerializer(BaseSerializer):
     """
     Serializer class to seralize Question model.
     """
     categories = QuestionCategorySerializer(many=True)
-    author = serializers.PrimaryKeyRelatedField(read_only=True)
-    name = serializers.CharField(source='author.get_full_name')
     answer = AnswerModelSerializer(many=True, read_only=True)
     comments = QuestionCommentSerializer(many=True, read_only=True)
 
