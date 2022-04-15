@@ -71,9 +71,9 @@ class BaseComment(models.Model):
 
 class QuestionComment(BaseComment):
     question = models.ForeignKey(
-        Question, related_name="comment_list", on_delete=models.CASCADE)
+        Question, related_name="comments", on_delete=models.CASCADE)
 
 
 class AnswerComment(BaseComment):
     answer = models.ForeignKey(
-        Answer, related_name="answer_list", on_delete=models.CASCADE)
+        Answer, related_name="comments", on_delete=models.CASCADE)
