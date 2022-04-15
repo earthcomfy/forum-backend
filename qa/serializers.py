@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Question, QuestionCategory, Answer
+from .models import Question, QuestionCategory, Answer, QuestionComment, AnswerComment
 
 
 class QuestionCategorySerializer(serializers.ModelSerializer):
@@ -12,39 +12,54 @@ class QuestionCategorySerializer(serializers.ModelSerializer):
         fields = ('id', 'name',)
 
 
-class AnswerModelSerializer(serializers.ModelSerializer):
+class BaseSerializer(serializers.ModelSerializer):
+    """
+    Base serializer class.
+    """
+    author = serializers.PrimaryKeyRelatedField(read_only=True)
+    name = serializers.CharField(source='author.get_full_name', read_only=True)
+
+
+class QuestionCommentSerializer(BaseSerializer):
+    """
+    Serializer class to seralize QuestionComment model.
+    """
+    class Meta:
+        model = QuestionComment
+        fields = ('__all__')
+
+
+class AnswerCommentSerializer(BaseSerializer):
+    """
+    Serializer class to seralize AnswerComment model.
+    """
+    class Meta:
+        model = AnswerComment
+        fields = ('__all__')
+
+
+class AnswerModelSerializer(BaseSerializer):
     """
     Serializer class to seralize Answer model.
     """
-    author = serializers.PrimaryKeyRelatedField(read_only=True)
-    name = serializers.SerializerMethodField()
+    comments = AnswerCommentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Answer
         fields = ('__all__')
 
-    def get_name(self, obj):
-        return obj.author.get_full_name()
 
-
-class QuestionSerializer(serializers.ModelSerializer):
+class QuestionSerializer(BaseSerializer):
     """
     Serializer class to seralize Question model.
     """
     categories = QuestionCategorySerializer(many=True)
-    author = serializers.PrimaryKeyRelatedField(read_only=True)
-    name = serializers.SerializerMethodField()
     answer = AnswerModelSerializer(many=True, read_only=True)
+    comments = QuestionCommentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Question
         fields = ('__all__')
-
-    def get_name(self, obj):
-        return obj.author.get_full_name()
-
-    def get_answers(self, obj):
-        return obj.answer.all()
 
     def create(self, validated_data):
         categories_data = validated_data.pop('categories')

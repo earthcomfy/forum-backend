@@ -52,3 +52,28 @@ class Answer(models.Model):
 
     def __str__(self):
         return self.body
+
+
+class BaseComment(models.Model):
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name="%(app_label)s_%(class)s_comments", null=True, on_delete=models.SET_NULL)
+    body = models.TextField(_('Comment body'))
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+        ordering = ('-created_at', )
+
+    def __str__(self):
+        return self.body
+
+
+class QuestionComment(BaseComment):
+    question = models.ForeignKey(
+        Question, related_name="comments", on_delete=models.CASCADE)
+
+
+class AnswerComment(BaseComment):
+    answer = models.ForeignKey(
+        Answer, related_name="comments", on_delete=models.CASCADE)
