@@ -1,4 +1,6 @@
-# Backend for the Forum web app
+# Backend for Bahir Dar University Forum Web App
+
+A project built under Google Developers Student Club (GDSC) Bahir Dar.
 
 ## Quick Start
 
@@ -11,8 +13,7 @@ To get this project up and running locally on your computer follow the following
 ```
 $ pip install -r requirements.txt
 ```
-4. Create `.env` and Generate a secret key from this site https://djecrety.ir/ and paste it into the .env file as follows.
-   SECRET_KEY = your_generated_secret_key
+4. Create `.env` file and include secret key.
 6. Set up a Postgres database for the project.
 7. Run the following commands to setup the database tables and create a super user.
 
